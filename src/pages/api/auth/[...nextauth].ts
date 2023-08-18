@@ -84,7 +84,7 @@ export const nextAuthOptions: NextAuthOptionsCallback = (
           label: "Email",
           type: "text",
         },
-        senha: {
+        password: {
           label: "Password",
           type: "password",
         },
@@ -103,11 +103,11 @@ export const nextAuthOptions: NextAuthOptionsCallback = (
         // };
 
         const response = await request<SignInResponse>(
-          signInRequest({ data: credentials })
+          signInRequest({ data: {email: credentials.email, password: credentials.password} })
         );
 
         if (response.type === "success") {
-          return response.value.usuario;
+          return response.value.user;
         }
 
         console.log("ERRO", response.error);

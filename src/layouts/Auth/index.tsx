@@ -25,12 +25,11 @@ export function AuthLayout({
       padding="0.75rem"
     >
       <Card
-        variant="outlined"
         padding="1.5rem"
         width="100%"
         maxWidth="400px"
-        borderWidth="thin"
         marginBottom="1rem"
+        boxShadow="lg"
       >
         <Box marginBottom="2rem">{header}</Box>
         {children}
