@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import { useRouter } from "next/router";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { Button, Flex } from "@chakra-ui/react";
@@ -17,16 +17,19 @@ export function SignInForm() {
 
   const router = useRouter();
 
+  const { data: session } = useSession();
+  console.log(session);
+
   const onSubmit = useCallback(
     async (data: SignInFormData) => {
       const response = await signIn("credentials", {
         ...data,
         redirect: false,
-        callbackUrl: "/tasks",
+        // callbackUrl: "/tasks",
       });
 
       if (response?.ok) {
-        router.push(response?.url || "/tasks");
+        // router.push(response?.url || "/tasks");
         toast.success("Bem vindo!");
       } else {
 

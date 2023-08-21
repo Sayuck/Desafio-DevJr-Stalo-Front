@@ -1,7 +1,7 @@
 import { Services } from "@services";
 
 const UserServices =
-  Services.API.createEndpoint("/user");
+  Services.API.createEndpoint("/register");
 
 export const createUser =
   UserServices.createQuery<SignUpFormData, void>({

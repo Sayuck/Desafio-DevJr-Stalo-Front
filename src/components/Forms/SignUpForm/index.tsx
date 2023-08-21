@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { Button, Flex } from "@chakra-ui/react";
 
+
 import { Input } from "@components/FormFields/Input";
 import { PasswordField } from "@components/FormFields/PasswordField";
 import { request } from "@lib/api";
@@ -40,6 +41,8 @@ export function SignUpForm({
     [redirectToSignin]
   );
 
+
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Flex flexDirection="column" gap="2rem">
@@ -64,10 +67,16 @@ export function SignUpForm({
             },
           })}
         />
+        {/* idade must be positive */}
+        
         <Input
           placeholder="Idade"
           {...register("idade", {
             required: false,
+            min: {
+              value: 1,
+              message: "Idade deve ser positiva",
+            },
           })}
           errors={errors.idade}/>
         <PasswordField
