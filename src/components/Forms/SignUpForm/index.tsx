@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { Button, Flex } from "@chakra-ui/react";
 
-
 import { Input } from "@components/FormFields/Input";
 import { PasswordField } from "@components/FormFields/PasswordField";
 import { request } from "@lib/api";
@@ -31,6 +30,7 @@ export function SignUpForm({
 
       if (response.type === "success") {
         toast.success("Cadastro realizado com sucesso!");
+        
         redirectToSignin();
 
         return;
