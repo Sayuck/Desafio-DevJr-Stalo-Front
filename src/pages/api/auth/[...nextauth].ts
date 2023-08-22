@@ -26,6 +26,7 @@ export default NextAuth({
 
           console.log("deu certo", response);
           if (response.type === "error") throw new Error(response.error.message);
+          console.log("deu certo", response.value);
 
           return response.value;
 

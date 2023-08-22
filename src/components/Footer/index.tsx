@@ -7,6 +7,12 @@ import {
   VStack,
 } from "@chakra-ui/react";
 
+
+const handleCreateTask = async (taskPayload: TaskPayload) => {
+  const newTask = await TasksService.createNewTask(taskPayload);
+  fetchTasks();
+};
+
 export function Footer() {
   return (
     <Flex
@@ -24,6 +30,10 @@ export function Footer() {
           variant="ghost"
           colorScheme="gray"
           aria-label="Home"
+          onClick={() => handleCreateTask({
+            description: "Teste",
+            active: true,
+          })}
         />
         <Text>Home</Text>
       </VStack>

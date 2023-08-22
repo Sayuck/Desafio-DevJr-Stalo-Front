@@ -1,6 +1,5 @@
 interface Task {
     id: number
-    title: string
     description: string
     active: boolean
     created_at: Date
@@ -8,7 +7,6 @@ interface Task {
   }
   
   interface TaskPayload {
-    title: string
     description: string
     active: boolean
   }

@@ -1,14 +1,74 @@
-import { Services } from "@services"
+import axios from "axios";
 
-const TaskService = Services.tasks.create("/tasks")
+const { NEXT_PUBLIC_REACT_APP_API_URL } = process.env;
 
-export const getTasks = TaskService.get
+const axiosInstance = axios.create({
+  baseURL: NEXT_PUBLIC_REACT_APP_API_URL,
+});
 
-export const getChamadoById = (id: number) =>
-  TaskService.get({ params: { id } })
+axiosInstance.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
 
-export const createChamado = TaskService.post<TaskPayload>
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
 
-export const updateChamado = TaskService.put<TaskPayload>
+  return config;
+});
 
-export const deleteChamado = TaskService.delete
+const createNewTask = async (
+  taskPayload: TaskPayload
+): Promise<Task> => {
+  const response = await axios.post(
+    `${NEXT_PUBLIC_REACT_APP_API_URL}/tasks`,
+    taskPayload
+  );
+
+  return response.data;
+};
+
+const updateExistingTask = async (
+  taskId: number,
+  taskPayload: TaskPayload
+): Promise<Task> => {
+  const response = await axios.put(
+    `${NEXT_PUBLIC_REACT_APP_API_URL}/task/${taskId}`,
+    taskPayload
+  );
+
+  return response.data;
+};
+
+const deleteExistingTask = async (
+  taskId: number
+): Promise<void> => {
+  await axios.delete(
+    `${NEXT_PUBLIC_REACT_APP_API_URL}/task/${taskId}`
+  );
+};
+
+const getAllTasks = async (): Promise<Task[]> => {
+  const response = await axios.get(
+    `${NEXT_PUBLIC_REACT_APP_API_URL}/tasks`
+  );
+
+  return response.data;
+};
+
+const getTask = async (taskId: number): Promise<Task> => {
+  const response = await axios.get(
+    `${NEXT_PUBLIC_REACT_APP_API_URL}/task/${taskId}`
+  );
+
+  return response.data;
+};
+
+const TasksService = {
+  createNewTask,
+  updateExistingTask,
+  deleteExistingTask,
+  getAllTasks,
+  getTask,
+};
+
+export default TasksService;
