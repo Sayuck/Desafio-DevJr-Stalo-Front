@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useRouter } from "next/router";
 import { signIn, useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
@@ -20,6 +20,16 @@ export function SignInForm() {
   const { data: session } = useSession();
   console.log(session, "session token");
 
+  useEffect(() => {
+    if (session) {
+      window.localStorage.setItem("token", session.user.token);
+      router.push("/tasks");
+      toast.success("Bem vindo!");
+    }
+  }
+  , [session, router]);
+
+
   const onSubmit = useCallback(
     async (data: SignInFormData) => {
       const response = await signIn("credentials", {
@@ -28,16 +38,11 @@ export function SignInForm() {
         callbackUrl: "/tasks",
       });
 
-      if (response?.ok) {
-        router.push(response?.url || "/tasks");
-        toast.success("Bem vindo!");
-        
-      } else {
-
+      if (!response?.ok) {
         toast.error(response?.error);
-      }
+      } 
     },
-    [router]
+    []
   );
 
   return (

@@ -13,8 +13,9 @@ export function BaseLayout({
   return (
     <Grid
       templateRows="auto minmax(0, 1fr) auto"
-      rowGap={4}
+      rowGap={12}
       maxWidth="100vw"
+      height="100vh"
     >
       <GridItem>
         <FiltersHeader />

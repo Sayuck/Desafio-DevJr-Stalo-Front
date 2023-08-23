@@ -8,7 +8,7 @@ import {
 import { IoMdCheckmarkCircle } from "react-icons/io";
 import {
   Box,
-  Checkbox,
+  Card,
   Container,
   Flex,
   IconButton,
@@ -16,6 +16,7 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  Radio,
   Text,
 } from "@chakra-ui/react";
 
@@ -35,7 +36,10 @@ import TasksService from "@services/Tasks";
 //   // Add more tasks here
 // ];
 
-const fetchTasks = async (setTasks:React.Dispatch<React.SetStateAction<Task[]>>, token:string) => {
+const fetchTasks = async (
+  setTasks: React.Dispatch<React.SetStateAction<Task[]>>,
+  token: string
+) => {
   const allTasks = await TasksService.getAllTasks(token);
   setTasks(allTasks);
 };
@@ -44,60 +48,66 @@ const ToDoList: React.FC = () => {
   const { data: session } = useSession();
   const [tasks, setTasks] = React.useState<Task[]>([]);
   useEffect(() => {
-    fetchTasks(setTasks, session?.user?.token??"");
-
-  }, [ session, setTasks]);
+    fetchTasks(setTasks, session?.user?.token ?? "");
+  }, [session, setTasks]);
   console.log(session?.user);
 
-  const handleUpdateTask = async (taskId: number, taskPayload: TaskPayload) => {
+  const handleUpdateTask = async (
+    taskId: number,
+    taskPayload: TaskPayload
+  ) => {
     TasksService.updateExistingTask(taskId, taskPayload);
-    fetchTasks( setTasks, session?.user?.token??"" );
+    fetchTasks(setTasks, session?.user?.token ?? "");
   };
 
   const handleDeleteTask = async (taskId: number) => {
     TasksService.deleteExistingTask(taskId);
-    fetchTasks( setTasks, session?.user?.token??"" );
+    fetchTasks(setTasks, session?.user?.token ?? "");
   };
 
   const handleTaskStatusChange = async (taskId: number) => {
-    const task = TasksService.getTask(taskId);
+    const task = await TasksService.getTask(taskId);
     TasksService.updateExistingTask(taskId, {
-          active: !task.active,
-          description: task.description,
-      });
-    fetchTasks( setTasks, session?.user?.token??"" );
+      active: !task.active,
+      description: task.description,
+    });
+    fetchTasks(setTasks, session?.user?.token ?? "");
   };
 
   const totalTasks = tasks?.length;
-    const completedTasks = tasks?.filter?.((task) => task.active).length;
+  const completedTasks = tasks?.filter?.(
+    (task) => task.active
+  ).length;
 
   return (
     <Container
       padding={20}
-      position="-webkit-sticky"
       maxW="container.lg"
     >
-      <Box
-        bg="white"
-        padding={8}
-        borderRadius="md"
+      <Text>
+        {new Date().toLocaleDateString("pt-BR", {
+          weekday: "short",
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        })}
+      </Text>
+      <Card
         boxShadow="md"
-        pb="70px"
-        mt={12}
+        size="lg"
+        height="500px"
+        padding={16}
+        overflowY="auto"
       >
-        <Text>
-          {new Date().toLocaleDateString("pt-BR", {
-            weekday: "short",
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-          })}
-        </Text>
         {tasks?.map?.((task) => (
           <Flex key={task.id} align="center" mt={2}>
-            <Checkbox isChecked={task.active} mr={2}
-            colorScheme="whatsapp"
-            onChange={() => handleTaskStatusChange(task.id)}
+            <Radio
+              isChecked={task.active}
+              mr={2}
+              colorScheme="whatsapp"
+              onChange={() =>
+                handleTaskStatusChange(task.id)
+              }
             />
             <Text flexGrow={1} isTruncated>
               {task.description}
@@ -126,13 +136,12 @@ const ToDoList: React.FC = () => {
                       fontSize={25}
                     />
                   }
-                onClick={() => handleUpdateTask(task.id, {
-                    active: !task.active,
-                    description: task.description,
-                    }
-
-                    )}
-                  
+                  onClick={() =>
+                    handleUpdateTask(task.id, {
+                      active: !task.active,
+                      description: task.description,
+                    })
+                  }
                 >
                   Concluir
                 </MenuItem>
@@ -148,15 +157,8 @@ const ToDoList: React.FC = () => {
             </Menu>
           </Flex>
         ))}
-      </Box>
-      <Box
-        bg="white"
-        p={4}
-        borderRadius="md"
-        boxShadow="md"
-        pb="70px"
-        mt={12}
-      >
+      </Card>
+      <Box>
         <Flex justify="space-between" mt={4}>
           <Text>
             Total de tarefas {completedTasks}/{totalTasks}

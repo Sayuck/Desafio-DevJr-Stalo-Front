@@ -2,25 +2,12 @@ import axios from "axios";
 
 const { NEXT_PUBLIC_REACT_APP_API_URL  } = process.env;
 
-const axiosInstance = axios.create({
-  baseURL: NEXT_PUBLIC_REACT_APP_API_URL,
-});
-
-axiosInstance.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
-
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-
-  return config;
-});
 
 const createNewTask = async (
   taskPayload: TaskPayload
 ): Promise<Task> => {
   const response = await axios.post(
-    `${NEXT_PUBLIC_REACT_APP_API_URL}/api/tasks`,
+    `${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/api/tasks`,
     taskPayload, { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
   );
 
@@ -49,7 +36,7 @@ const deleteExistingTask = async (
 
 const getAllTasks = async (): Promise<Task[]> => {
   const response = await axios.get(
-    `${NEXT_PUBLIC_REACT_APP_API_URL}/api/tasks`, { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+    `${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/api/tasks`, { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
   );
 
   return response.data;
