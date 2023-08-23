@@ -6,6 +6,7 @@ import {
   BiTrash,
 } from "react-icons/bi";
 import { IoMdCheckmarkCircle } from "react-icons/io";
+import { toast } from "react-toastify";
 import {
   Box,
   Card,
@@ -18,19 +19,21 @@ import {
   MenuList,
   Radio,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react";
 
+import { DrawerComponent } from "@components/Drawer";
 import { useTasks } from "@contexts/index";
 import {TasksService} from "@services/Tasks";
 
 
 
 const ToDoList: React.FC = () => {
+  const { isOpen, onClose, onOpen } = useDisclosure();
   const { data: session } = useSession();
   const { tasks, handleUpdateTask } = useTasks();
 
-
-
+  const [currentTask, setCurrentTask] = React.useState<Task>();
 
   const handleDeleteTask = async (taskId: number) => {
     await TasksService.deleteExistingTask(taskId);
@@ -102,12 +105,13 @@ const ToDoList: React.FC = () => {
                   icon={
                     <BiEdit color="gray" fontSize={25} />
                   }
-                  onClick={() =>
-                    handleUpdateTask(task.id, {
-                      description: "Teste",
-                      completed: false,
-                    })
+                  
+                  onClick={() => {
+                    setCurrentTask(task);
+                    onOpen();
                   }
+                  }
+                  
                 >
                   Editar
                 </MenuItem>
@@ -144,6 +148,21 @@ const ToDoList: React.FC = () => {
           </Text>
         </Flex>
       </Box>
+      <DrawerComponent
+          title="Editar Tarefa"
+          submitButtonLabel="Editar"
+          onSubmit={async ({ task }) => {
+            await TasksService.updateExistingTask( currentTask.id, {
+              description: task,
+              completed: currentTask?.completed,
+            }) ;
+            toast.success("Tarefa Editada com sucesso!");
+            onClose();
+            handleUpdateTask();
+          }}
+          isOpen={isOpen}
+          onClose={onClose}
+        />
     </Container>
   );
 };
