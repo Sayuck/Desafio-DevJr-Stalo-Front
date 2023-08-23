@@ -19,7 +19,7 @@ const updateExistingTask = async (
   taskPayload: TaskPayload
 ): Promise<Task> => {
   const response = await axios.put(
-    `${NEXT_PUBLIC_REACT_APP_API_URL}/api/tasks/${taskId}`, 
+    `${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/api/tasks/${taskId}`, 
     taskPayload, { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
   );
 
@@ -30,7 +30,7 @@ const deleteExistingTask = async (
   taskId: number
 ): Promise<void> => {
   await axios.delete(
-    `${NEXT_PUBLIC_REACT_APP_API_URL}/api/tasks/${taskId}`, { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+    `${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/api/tasks/${taskId}`, { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
   );
 };
 
@@ -44,7 +44,7 @@ const getAllTasks = async (): Promise<Task[]> => {
 
 const getTask = async (taskId: number): Promise<Task> => {
   const response = await axios.get(
-    `${NEXT_PUBLIC_REACT_APP_API_URL}/api/tasks/${taskId}`, { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+    `${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/api/tasks/${taskId}`, { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
   );
 
   return response.data;
@@ -58,4 +58,4 @@ const TasksService = {
   getTask,
 };
 
-export default TasksService;
+export {TasksService};

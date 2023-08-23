@@ -8,6 +8,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { SWRConfig, SWRConfiguration } from "swr";
 
 import { ErrorBoundary } from "@components/ErrorBoundary";
+import { TasksContextProvider } from "@contexts/index";
 import { BaseLayout } from "@layouts/Base";
 
 import { theme } from "@styles/theme";
@@ -42,32 +43,34 @@ function App({
     ));
 
   return (
-    <ChakraProvider theme={theme}>
-      <NextNprogress
-        color="linear-gradient(
+    <TasksContextProvider>
+      <ChakraProvider theme={theme}>
+        <NextNprogress
+          color="linear-gradient(
 						to right,
 					#4276b3,
 					#2b5d96,
 					#285a94,
 					#193e69
 					)"
-        startPosition={0.45}
-        stopDelayMs={100}
-      />
+          startPosition={0.45}
+          stopDelayMs={100}
+        />
 
-      <SWRConfig value={swrConfig}>
-        <SessionProvider session={session}>
-          {getLayout(<Component {...pageProps} />)}
-        </SessionProvider>
-      </SWRConfig>
+        <SWRConfig value={swrConfig}>
+          <SessionProvider session={session}>
+            {getLayout(<Component {...pageProps} />)}
+          </SessionProvider>
+        </SWRConfig>
 
-      <ToastContainer
-        position="top-right"
-        hideProgressBar
-        autoClose={3000}
-        transition={Slide}
-      />
-    </ChakraProvider>
+        <ToastContainer
+          position="top-right"
+          hideProgressBar
+          autoClose={3000}
+          transition={Slide}
+        />
+      </ChakraProvider>
+    </TasksContextProvider>
   );
 }
 

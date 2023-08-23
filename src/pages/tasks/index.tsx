@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useSession } from "next-auth/react";
 import {
   BiDotsVerticalRounded,
@@ -20,70 +20,41 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-import TasksService from "@services/Tasks";
+import { useTasks } from "@contexts/index";
+import {TasksService} from "@services/Tasks";
 
-// const tasks = [
-//   { id: 1, description: 'Task 1', completed: false },
-//   { id: 2, description: 'Task 2', completed: true },
-//   { id: 3, description: 'Task 3', completed: false },
-//   { id: 4, description: 'Task 4', completed: false },
-//   { id: 5, description: 'Task 5', completed: false },
-//   { id: 6, description: 'Task 6', completed: false },
-//   { id: 7, description: 'Task 7', completed: false },
-//   { id: 8, description: 'Task 8', completed: false },
-//   { id: 9, description: 'Task 9', completed: false },
-//   { id: 10, description: 'Task 10', completed: false },
-//   // Add more tasks here
-// ];
 
-const fetchTasks = async (
-  setTasks: React.Dispatch<React.SetStateAction<Task[]>>,
-  token: string
-) => {
-  const allTasks = await TasksService.getAllTasks(token);
-  setTasks(allTasks);
-};
 
 const ToDoList: React.FC = () => {
   const { data: session } = useSession();
-  const [tasks, setTasks] = React.useState<Task[]>([]);
-  useEffect(() => {
-    fetchTasks(setTasks, session?.user?.token ?? "");
-  }, [session, setTasks]);
-  console.log(session?.user);
+  const { tasks, handleUpdateTask } = useTasks();
 
-  const handleUpdateTask = async (
-    taskId: number,
-    taskPayload: TaskPayload
-  ) => {
-    TasksService.updateExistingTask(taskId, taskPayload);
-    fetchTasks(setTasks, session?.user?.token ?? "");
-  };
+
+
 
   const handleDeleteTask = async (taskId: number) => {
-    TasksService.deleteExistingTask(taskId);
-    fetchTasks(setTasks, session?.user?.token ?? "");
+    await TasksService.deleteExistingTask(taskId);
+    handleUpdateTask();
+    
   };
 
-  const handleTaskStatusChange = async (taskId: number) => {
-    const task = await TasksService.getTask(taskId);
-    TasksService.updateExistingTask(taskId, {
-      active: !task.active,
+  console.log(tasks, "tasks lixosas")
+  
+  const handleTaskStatusChange = async (task: Task) => {   
+    await TasksService.updateExistingTask(task.id, {
+      completed: !task.completed,
       description: task.description,
     });
-    fetchTasks(setTasks, session?.user?.token ?? "");
+    handleUpdateTask();
   };
 
   const totalTasks = tasks?.length;
   const completedTasks = tasks?.filter?.(
-    (task) => task.active
+    (task) => task.completed
   ).length;
 
   return (
-    <Container
-      padding={20}
-      maxW="container.lg"
-    >
+    <Container padding={20} maxW="container.lg">
       <Text>
         {new Date().toLocaleDateString("pt-BR", {
           weekday: "short",
@@ -100,13 +71,18 @@ const ToDoList: React.FC = () => {
         overflowY="auto"
       >
         {tasks?.map?.((task) => (
-          <Flex key={task.id} align="center" mt={2}>
+          <Flex
+            key={task.id}
+            align="center"
+            mt={2}
+            cursor="pointer"
+          >
             <Radio
-              isChecked={task.active}
+              isChecked={task.completed}
               mr={2}
               colorScheme="whatsapp"
-              onChange={() =>
-                handleTaskStatusChange(task.id)
+              onClick={() =>
+                handleTaskStatusChange(task)
               }
             />
             <Text flexGrow={1} isTruncated>
@@ -126,6 +102,12 @@ const ToDoList: React.FC = () => {
                   icon={
                     <BiEdit color="gray" fontSize={25} />
                   }
+                  onClick={() =>
+                    handleUpdateTask(task.id, {
+                      description: "Teste",
+                      completed: false,
+                    })
+                  }
                 >
                   Editar
                 </MenuItem>
@@ -137,10 +119,7 @@ const ToDoList: React.FC = () => {
                     />
                   }
                   onClick={() =>
-                    handleUpdateTask(task.id, {
-                      active: !task.active,
-                      description: task.description,
-                    })
+                    handleTaskStatusChange(task)
                   }
                 >
                   Concluir

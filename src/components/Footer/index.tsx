@@ -1,19 +1,22 @@
 import { AiOutlinePlus } from "react-icons/ai";
 import { MdExitToApp, MdHome } from "react-icons/md";
+import { toast } from "react-toastify";
 import {
   Flex,
   IconButton,
   Text,
+  useDisclosure,
   VStack,
 } from "@chakra-ui/react";
 
-
-const handleCreateTask = async (taskPayload: TaskPayload) => {
-  const newTask = await TasksService.createNewTask(taskPayload);
-  fetchTasks();
-};
+import { DrawerComponent } from "@components/Drawer";
+import { useTasks } from "@contexts/index";
+import { TasksService } from "@services/Tasks";
 
 export function Footer() {
+  const { isOpen, onClose, onOpen } = useDisclosure();
+  const { tasks, handleUpdateTask } = useTasks();
+
   return (
     <Flex
       p={4}
@@ -30,10 +33,6 @@ export function Footer() {
           variant="ghost"
           colorScheme="gray"
           aria-label="Home"
-          onClick={() => handleCreateTask({
-            description: "Teste",
-            active: true,
-          })}
         />
         <Text>Home</Text>
       </VStack>
@@ -43,7 +42,23 @@ export function Footer() {
           colorScheme="whatsapp"
           borderRadius="full"
           aria-label="Adicionar"
-          variant= "solid"
+          variant="solid"
+          onClick={onOpen}
+        />
+        <DrawerComponent
+          title="Criar Nova Tarefa"
+          submitButtonLabel="Criar"
+          onSubmit={async ({ task }) => {
+            await TasksService.createNewTask({
+              description: task,
+              completed: false,
+            });
+            toast.success("Tarefa criada com sucesso!");
+            onClose();
+            handleUpdateTask();
+          }}
+          isOpen={isOpen}
+          onClose={onClose}
         />
         <Text>Adicionar</Text>
       </VStack>
@@ -54,6 +69,7 @@ export function Footer() {
           variant="ghost"
           aria-label="Sair"
         />
+
         <Text>Sair</Text>
       </VStack>
     </Flex>
