@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { useSession } from "next-auth/react";
 import {
   BiDotsVerticalRounded,
   BiEdit,
@@ -34,27 +35,28 @@ import TasksService from "@services/Tasks";
 //   // Add more tasks here
 // ];
 
+const fetchTasks = async (setTasks:React.Dispatch<React.SetStateAction<Task[]>>, token:string) => {
+  const allTasks = await TasksService.getAllTasks(token);
+  setTasks(allTasks);
+};
 
 const ToDoList: React.FC = () => {
+  const { data: session } = useSession();
   const [tasks, setTasks] = React.useState<Task[]>([]);
   useEffect(() => {
-    fetchTasks();
-  }, []);
+    fetchTasks(setTasks, session?.user?.token??"");
 
-  const fetchTasks = async () => {
-    const allTasks = TasksService.getAllTasks();
-    setTasks(allTasks);
-  };
-
+  }, [ session, setTasks]);
+  console.log(session?.user);
 
   const handleUpdateTask = async (taskId: number, taskPayload: TaskPayload) => {
     TasksService.updateExistingTask(taskId, taskPayload);
-    fetchTasks();
+    fetchTasks( setTasks, session?.user?.token??"" );
   };
 
   const handleDeleteTask = async (taskId: number) => {
     TasksService.deleteExistingTask(taskId);
-    fetchTasks();
+    fetchTasks( setTasks, session?.user?.token??"" );
   };
 
   const handleTaskStatusChange = async (taskId: number) => {
@@ -63,7 +65,7 @@ const ToDoList: React.FC = () => {
           active: !task.active,
           description: task.description,
       });
-    fetchTasks();
+    fetchTasks( setTasks, session?.user?.token??"" );
   };
 
   const totalTasks = tasks?.length;

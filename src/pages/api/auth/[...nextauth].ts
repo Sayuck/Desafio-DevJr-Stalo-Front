@@ -15,7 +15,7 @@ export default NextAuth({
       authorize: async (credentials) => {
         // You can make a request to your Laravel backend here
         try {
-          const response = await request(
+          const response = await request <{token:string}>( 
             {
               url: "/api/login",
               method: "POST",
@@ -24,9 +24,9 @@ export default NextAuth({
 
           );
 
-          console.log("deu certo", response);
+          
           if (response.type === "error") throw new Error(response.error.message);
-          console.log("deu certo", response.value);
+          
 
           return response.value;
 
@@ -56,7 +56,6 @@ export default NextAuth({
       return token
     },
     async session({ session, token }) {
-      console.log("SESSION: ", session, token)
 
       session.user = token.user as LoggedUser
       session.token = token

@@ -18,19 +18,20 @@ export function SignInForm() {
   const router = useRouter();
 
   const { data: session } = useSession();
-  console.log(session);
+  console.log(session, "session token");
 
   const onSubmit = useCallback(
     async (data: SignInFormData) => {
       const response = await signIn("credentials", {
         ...data,
         redirect: false,
-        // callbackUrl: "/tasks",
+        callbackUrl: "/tasks",
       });
 
       if (response?.ok) {
-        // router.push(response?.url || "/tasks");
+        router.push(response?.url || "/tasks");
         toast.success("Bem vindo!");
+        
       } else {
 
         toast.error(response?.error);

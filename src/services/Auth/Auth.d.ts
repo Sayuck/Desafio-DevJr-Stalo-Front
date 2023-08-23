@@ -1,9 +1,9 @@
 type LoggedUser = {
   id: number;
   email: string;
-  telefone: string;
   nome: string;
   idade: number;
+  token: string;
 };
 
 interface SignInFormData {
