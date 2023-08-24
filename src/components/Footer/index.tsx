@@ -74,7 +74,7 @@ export function Footer() {
           onClick={() => {
             logout();
             signOut({ redirect: true, callbackUrl: "/" });
-            // localStorage.removeItem("token");
+            localStorage.removeItem("token");
           }
           }
         />
