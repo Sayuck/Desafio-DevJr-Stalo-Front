@@ -38,12 +38,20 @@ const Auth: NextPageWithLayout = () => {
       header={
         {
           signin: (
-            <Text fontSize="3xl" fontWeight="bold" textAlign="center">
+            <Text
+              fontSize="3xl"
+              fontWeight="bold"
+              textAlign="center"
+            >
               Bem-Vindo(a)
             </Text>
           ),
           signup: (
-            <Text fontSize="3xl" fontWeight="bold" textAlign="center">
+            <Text
+              fontSize="3xl"
+              fontWeight="bold"
+              textAlign="center"
+            >
               Cadastre sua conta.
             </Text>
           ),

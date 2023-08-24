@@ -37,6 +37,7 @@
     "react-perf/jsx-no-new-object-as-prop": "off",
     "react-perf/jsx-no-new-array-as-prop": "off",
     "no-inline-styles/no-inline-styles": "error",
+    "react-perf/jsx-no-new-function-as-prop": "off",
 
     // eslint rules
     // "eslint-comments/no-use": ["warn", { "allow": [] }],

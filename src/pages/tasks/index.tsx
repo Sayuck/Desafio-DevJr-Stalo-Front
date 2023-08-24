@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { useSession } from "next-auth/react";
 import {
   BiDotsVerticalRounded,
@@ -44,10 +44,10 @@ const ToDoList: React.FC = () => {
     setIsTaskModalOpen(true);
   };
 
-  const closeTaskModal = () => {
+  const closeTaskModal = useCallback(() => {
     setSelectedTask(undefined);
     setIsTaskModalOpen(false);
-  };
+  }, []);
 
   const [currentTask, setCurrentTask] =
     React.useState<Task>();
@@ -170,10 +170,10 @@ const ToDoList: React.FC = () => {
         submitButtonLabel="Salvar"
         onSubmit={async ({ task }) => {
           await TasksService.updateExistingTask(
-            currentTask.id,
+            currentTask?.id as number,
             {
               description: task,
-              completed: currentTask?.completed,
+              completed: currentTask?.completed ?? false,
             }
           );
           toast.success("Tarefa Editada com sucesso!");

@@ -1,8 +1,7 @@
 import NextAuth from "next-auth";
-import CredentialsProvider from 'next-auth/providers/credentials';
+import CredentialsProvider from "next-auth/providers/credentials";
 
 import { request } from "@lib/api/request";
-
 
 export default NextAuth({
   providers: [
@@ -10,34 +9,28 @@ export default NextAuth({
       name: "Credentials",
       credentials: {
         email: { label: "Email", type: "text" },
-        password: {  label: "Password", type: "password" },
+        password: { label: "Password", type: "password" },
       },
       authorize: async (credentials) => {
         // You can make a request to your Laravel backend here
         try {
-          const response = await request <{token:string}>( 
+          const response = await request<{ token: string }>(
             {
               url: "/api/login",
               method: "POST",
               data: credentials,
             }
-
           );
 
-          
-          if (response.type === "error") throw new Error(response.error.message);
-          
+          if (response.type === "error")
+            throw new Error(response.error.message);
 
           return response.value;
-
-        }
-        catch (e) {
+        } catch (e) {
           console.log("deu erro", e);
         }
 
         return null;
-
-        
       },
     }),
   ],
@@ -50,19 +43,16 @@ export default NextAuth({
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.user = user
+        token.user = user;
       }
 
-      return token
+      return token;
     },
     async session({ session, token }) {
+      session.user = token.user as LoggedUser;
+      session.token = token;
 
-      session.user = token.user as LoggedUser
-      session.token = token
-
-      return session
-    }
-
+      return session;
+    },
   },
-
 });
