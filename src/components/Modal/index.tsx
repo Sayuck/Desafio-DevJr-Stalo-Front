@@ -40,7 +40,7 @@ export function Modal({
       <ModalContent
         transform="auto-gpu" // force the browser use GPU acceleration for that particular element instead of the CPU
         backdropFilter="blur(8px)"
-        maxWidth="90%"
+        
         {...contentProps}
       >
         <ModalCloseButton size="lg" />
