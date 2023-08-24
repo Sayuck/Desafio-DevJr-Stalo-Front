@@ -1,7 +1,7 @@
 type LoggedUser = {
   id: number;
   email: string;
-  nome: string;
+  name: string;
   idade: number;
   token: string;
 };
@@ -15,7 +15,7 @@ type AuthState = "signin" | "signup";
 
 interface SignUpFormData {
   email: string;
-  nome: string;
+  name: string;
   idade: number;
   password: string;
   confirmPassword: string;

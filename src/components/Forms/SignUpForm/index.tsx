@@ -6,7 +6,7 @@ import { Button, Flex } from "@chakra-ui/react";
 import { Input } from "@components/FormFields/Input";
 import { PasswordField } from "@components/FormFields/PasswordField";
 import { request } from "@lib/api";
-import { createUser } from "@services/User";
+import { signUpRequest } from "@services/Auth/signUp";
 
 interface SignUpFormProps {
   redirectToSignin: () => void;
@@ -25,7 +25,7 @@ export function SignUpForm({
   const onSubmit = useCallback(
     async (data: SignUpFormData) => {
       const response = await request(
-        createUser({ data })
+        signUpRequest({ data })
       );
 
       if (response.type === "success") {
@@ -48,10 +48,10 @@ export function SignUpForm({
       <Flex flexDirection="column" gap="2rem">
         <Input
           placeholder="Nome"
-          {...register("nome", {
+          {...register("name", {
             required: "Nome é obrigatório",
           })}
-          errors={errors.nome}
+          errors={errors.name}
         />
 
 
