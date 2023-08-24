@@ -13,6 +13,7 @@ import {
 
 import { DrawerComponent } from "@components/Drawer";
 import { useTasks } from "@contexts/index";
+import logout from "@services/Logout";
 import { TasksService } from "@services/Tasks";
 
 export function Footer() {
@@ -71,8 +72,9 @@ export function Footer() {
           variant="ghost"
           aria-label="Sair"
           onClick={() => {
-            localStorage.removeItem("token");
+            logout();
             signOut({ redirect: true, callbackUrl: "/" });
+            // localStorage.removeItem("token");
           }
           }
         />
