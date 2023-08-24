@@ -43,34 +43,34 @@ function App({
     ));
 
   return (
-    <TasksContextProvider>
-      <ChakraProvider theme={theme}>
-        <NextNprogress
-          color="linear-gradient(
+    <SWRConfig value={swrConfig}>
+      <SessionProvider session={session}>
+        <TasksContextProvider>
+          <ChakraProvider theme={theme}>
+            <NextNprogress
+              color="linear-gradient(
 						to right,
 					#4276b3,
 					#2b5d96,
 					#285a94,
 					#193e69
 					)"
-          startPosition={0.45}
-          stopDelayMs={100}
-        />
+              startPosition={0.45}
+              stopDelayMs={100}
+            />
 
-        <SWRConfig value={swrConfig}>
-          <SessionProvider session={session}>
             {getLayout(<Component {...pageProps} />)}
-          </SessionProvider>
-        </SWRConfig>
 
-        <ToastContainer
-          position="top-right"
-          hideProgressBar
-          autoClose={3000}
-          transition={Slide}
-        />
-      </ChakraProvider>
-    </TasksContextProvider>
+            <ToastContainer
+              position="top-right"
+              hideProgressBar
+              autoClose={3000}
+              transition={Slide}
+            />
+          </ChakraProvider>
+        </TasksContextProvider>
+      </SessionProvider>
+    </SWRConfig>
   );
 }
 

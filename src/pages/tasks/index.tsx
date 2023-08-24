@@ -150,7 +150,7 @@ const ToDoList: React.FC = () => {
       </Box>
       <DrawerComponent
           title="Editar Tarefa"
-          submitButtonLabel="Editar"
+          submitButtonLabel="Salvar"
           onSubmit={async ({ task }) => {
             await TasksService.updateExistingTask( currentTask.id, {
               description: task,

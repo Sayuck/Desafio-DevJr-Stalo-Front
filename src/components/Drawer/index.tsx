@@ -69,15 +69,18 @@ function DrawerComponent({
         <DrawerFooter>
           <Button
             variant="outline"
+            colorScheme="gray"
             mr={3}
             onClick={rest.onClose}
+            borderRadius="full"
           >
-            Cancel
+            Cancelar
           </Button>
           <Button
-            colorScheme="blue"
+            colorScheme="whatsapp"
             type="submit"
             form="ceu"
+            borderRadius="full"
           >
             {submitButtonLabel}
           </Button>

@@ -5,9 +5,13 @@ import {
   Text,
 } from "@chakra-ui/react";
 
+import { useTasks } from "@contexts/index";
+
 
 
 export function FiltersHeader() {
+  const { tasks, handleUpdateTask, filterState, setFilterState } = useTasks();
+
   return (
     <Box
       bg="white"
@@ -23,23 +27,26 @@ export function FiltersHeader() {
       <Text>Filtrar</Text>
       <HStack justifyContent="Center">
         <Button
-          colorScheme="whatsapp"
+          colorScheme={filterState === "all" ? "whatsapp" : "gray"}
           ml={2}
           borderRadius="full"
+          onClick={() => setFilterState("all")}
         >
           Todas
         </Button>
         <Button
-          colorScheme="whatsapp"
+          colorScheme={filterState === "uncompleted" ? "whatsapp" : "gray"}
           ml={2}
           borderRadius="full"
+          onClick={() => setFilterState("uncompleted")}
         >
           A fazer
         </Button>
         <Button
-          colorScheme="whatsapp"
+          colorScheme={filterState === "completed" ? "whatsapp" : "gray"}
           ml={2}
           borderRadius="full"
+          onClick={() => setFilterState("completed")}
         >
           Feitas
         </Button>

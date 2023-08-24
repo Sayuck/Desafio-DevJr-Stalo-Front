@@ -21,6 +21,7 @@ export function SignInForm() {
   console.log(session, "session token");
 
   useEffect(() => {
+    
     if (session) {
       window.localStorage.setItem("token", session.user.token);
       router.push("/tasks");

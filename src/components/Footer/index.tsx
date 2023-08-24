@@ -1,8 +1,10 @@
-import { AiOutlinePlus } from "react-icons/ai";
-import { MdExitToApp, MdHome } from "react-icons/md";
+import { signOut } from "next-auth/react";
+import { AiOutlineHome, AiOutlinePlus } from "react-icons/ai";
+import { MdExitToApp } from "react-icons/md";
 import { toast } from "react-toastify";
 import {
   Flex,
+  Icon,
   IconButton,
   Text,
   useDisclosure,
@@ -29,16 +31,16 @@ export function Footer() {
     >
       <VStack>
         <IconButton
-          icon={<MdHome />}
+          icon={<Icon as={AiOutlineHome} boxSize={8} />} 
           variant="ghost"
-          colorScheme="gray"
+          colorScheme="whatsapp"
           aria-label="Home"
         />
         <Text>Home</Text>
       </VStack>
       <VStack>
         <IconButton
-          icon={<AiOutlinePlus />}
+          icon={<Icon as={AiOutlinePlus} boxSize={12} />}
           colorScheme="whatsapp"
           borderRadius="full"
           aria-label="Adicionar"
@@ -64,10 +66,15 @@ export function Footer() {
       </VStack>
       <VStack>
         <IconButton
-          icon={<MdExitToApp />}
+          icon={<Icon as={MdExitToApp} boxSize={8} />}
           colorScheme="gray"
           variant="ghost"
           aria-label="Sair"
+          onClick={() => {
+            localStorage.removeItem("token");
+            signOut({ redirect: true, callbackUrl: "/" });
+          }
+          }
         />
 
         <Text>Sair</Text>
